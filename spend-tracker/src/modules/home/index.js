@@ -13,30 +13,34 @@ const Container = styled.div`
 
 const HomeComponent = () => {
   const [transactions, updateTransactions] = useState([]);
-  const [income, setIncome] = useState(0);
   const [expense, setExpense] = useState(0);
+  const [income, setIncome] = useState(0);
 
   const addTransaction = (payload) => {
     const transactionA = [...transactions, payload];
     updateTransactions(transactionA);
   };
 
-  useEffect(() => {
+  const calcBalance = () => {
     let exp = 0;
     let inc = 0;
-    transactions.forEach((t) => {
-      t.type === "EXPENSE" ? (exp += t.amount) : (inc += t.amount);
+    transactions.map((payload) => {
+      payload.type === "EXPENSE"
+        ? (exp = exp + payload.amount)
+        : (inc = inc + payload.amount);
     });
     setExpense(exp);
     setIncome(inc);
-  }, [transactions]);
+  };
+
+  useEffect(() => calcBalance(), [transactions]);
 
   return (
     <Container>
       <SummaryComp
         addTransaction={addTransaction}
-        income={income}
         expense={expense}
+        income={income}
       />
       <ActivityComp transactions={transactions} />
     </Container>

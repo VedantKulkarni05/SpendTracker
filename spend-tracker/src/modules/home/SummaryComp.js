@@ -92,10 +92,10 @@ const ExpBox = styled.div`
   border-radius: 4px;
   width: 150px;
   font-size: 18px;
-  & span{
-    font-weight:bold;
-    font-size:25px;
-    color:red;
+  & span {
+    font-weight: bold;
+    font-size: 25px;
+    color: red;
   }
 `;
 
@@ -105,12 +105,12 @@ const IncomeBox = styled.div`
   border: 2px solid #ffffff;
   padding: 15px 20px;
   border-radius: 4px;
-  width: 180px;
+  width: 150px;
   font-size: 18px;
-    & span{
-    font-weight:bold;
-    font-size:25px;
-    color:green;
+  & span {
+    font-weight: bold;
+    font-size: 25px;
+    color: green;
   }
 `;
 
@@ -177,13 +177,13 @@ const AddTransView = ({ addTransaction, toggleAddTrans }) => {
   );
 };
 
-const SummaryComp = ({ addTransaction }) => {
+const SummaryComp = ({ addTransaction, expense, income }) => {
   const [isAddtransVisible, toggleAddTrans] = useState(false);
 
   return (
     <Container>
       <BalanceA>
-        <span>Available Balance: ₹1000</span>
+        <span>Available Balance: ₹{income - expense}</span>
         <AddTrans onClick={() => toggleAddTrans(!isAddtransVisible)}>
           {isAddtransVisible ? "Cancel" : "Add"}
         </AddTrans>
@@ -197,10 +197,10 @@ const SummaryComp = ({ addTransaction }) => {
       )}
       <ExpContainer>
         <ExpBox>
-          Expense <span>₹1000</span>
+          Expense <span>₹{expense}</span>
         </ExpBox>
         <IncomeBox>
-          Income <span>₹10000</span>
+          Income <span>₹{income}</span>
         </IncomeBox>
       </ExpContainer>
     </Container>

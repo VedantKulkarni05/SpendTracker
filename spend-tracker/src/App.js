@@ -7,6 +7,7 @@ const Container = styled.div`
   align-items: center;
   margin-top: 50px;
   font-family: "Sora", sans-serif;
+  width: 100%;
 `;
 
 const Header = styled.span`
