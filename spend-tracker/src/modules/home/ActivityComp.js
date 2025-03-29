@@ -9,6 +9,11 @@ const Container = styled.div`
 `;
 
 const ActivityComp = (props) => {
-  return <Container>ActivityComp</Container>;
+  return (
+    <Container>
+      Activity
+      <input placeholder="Search" />
+    </Container>
+  );
 };
 export default ActivityComp;
