@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -17,10 +18,7 @@ const Container = styled.div`
     border: 1px solid #ccc;
     border-radius: 15px;
     font-size: 18px;
-    // width: 100%;
-    // max-width: 400px;
     margin-top: 10px;
-
     transition: border 0.2s ease-in-out;
     background-color: #e6e8e9;
     outline: none;
@@ -28,7 +26,6 @@ const Container = styled.div`
     &::placeholder {
       color: rgba(0, 0, 0, 0.5);
       font-style: italic;
-
       opacity: 0.7;
     }
   }
@@ -41,35 +38,55 @@ const Cell = styled.div`
   width: 100%;
   max-width: 400px;
   margin-top: 25px;
-
   font-size: 18px;
   border: 1px solid white;
   border-radius: 4px;
   align-items: center;
   font-weight: normal;
   justify-content: space-between;
-  border-left: 4px solid ${(props) => (props.isExpense ? "red" : " green")};
+  border-left: 4px solid ${(props) => (props.isExpense ? "red" : "green")};
 `;
 
-const TransactionCell = (props) => {
+const TransactionCell = ({ payload }) => {
   return (
-    <Cell isExpense={props.payload?.type === "EXPENSE"}>
-      <span>₹{props.payload.amount}</span>
-      <span>{props.payload.desc}</span>
+    <Cell isExpense={payload.type === "EXPENSE"}>
+      <span>₹{payload.amount}</span>
+      <span>{payload.desc}</span>
     </Cell>
   );
 };
 
-const ActivityComp = (props) => {
+const ActivityComp = ({ transactions }) => {
+  const [searchTxt, updateSearchTxn] = useState("");
+  const [filteredTransaction, updateTxn] = useState(transactions);
+
+  // Update filtered transactions when the search text changes
+  useEffect(() => {
+    if (!searchTxt.trim()) {
+      updateTxn(transactions);
+      return;
+    }
+    const filtered = transactions.filter((payload) =>
+      payload.desc.toLowerCase().includes(searchTxt.toLowerCase().trim())
+    );
+    updateTxn(filtered);
+  }, [searchTxt, transactions]);
+
   return (
     <Container>
       Activity
-      <input placeholder="Search" />
-      {props.transactions?.length
-        ? props.transactions.map((payload) => (
-            <TransactionCell payload={payload} />
-          ))
-        : ""}
+      <input
+        placeholder="Search"
+        value={searchTxt}
+        onChange={(e) => updateSearchTxn(e.target.value)}
+      />
+      {filteredTransaction.length > 0 ? (
+        filteredTransaction.map((payload) => (
+          <TransactionCell key={payload.id} payload={payload} />
+        ))
+      ) : (
+        <p>No transactions found.</p>
+      )}
     </Container>
   );
 };
