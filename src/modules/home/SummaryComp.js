@@ -9,6 +9,12 @@ const Container = styled.div`
   font-family: "Sora", sans-serif;
   width: 100%;
   max-width: 400px;
+  padding: 10px;
+
+  @media (max-width: 480px) {
+    margin-top: 30px;
+    padding: 5px;
+  }
 `;
 
 const BalanceA = styled.div`
@@ -20,10 +26,15 @@ const BalanceA = styled.div`
   padding: 10px;
   font-size: 20px;
   font-weight: 600;
-  gap: 80px;
+  gap: 30px;
+
+  @media (max-width: 480px) {
+    font-size: 20px;
+    gap: 15px;
+  }
 `;
 
-const AddTrans = styled.div`
+const AddTrans = styled.button`
   background: #778da9;
   color: white;
   font-size: 20px;
@@ -39,10 +50,14 @@ const AddTransContainer = styled.div`
   display: flex;
   flex-direction: column;
   border: 2px solid #ccc;
-  gap: 20px;
-  padding: 50px 100px;
+  border-radius: 20px;
+  gap: 15px;
+  padding: 25px;
   margin: 10px;
   align-items: center;
+  width: 100%;
+  max-width: 350px;
+  // overflow-x: hidden;
 
   & input {
     width: 100%;
@@ -50,18 +65,11 @@ const AddTransContainer = styled.div`
     border: 1px solid #e6e8e9;
     border-radius: 4px;
     font-size: 16px;
-    outline: none;
-    transition: all 0.3s ease-in-out;
+  }
 
-    &::placeholder {
-      color: rgba(136, 136, 136, 0.8);
-      font-style: italic;
-      transition: all 0.3s ease-in-out;
-    }
-
-    &:focus::placeholder {
-      opacity: 0.5;
-    }
+  @media (max-width: 480px) {
+    padding: 20px;
+    // max-width: 100%;
   }
 `;
 
@@ -71,6 +79,8 @@ const RadioBox = styled.div`
   width: 100%;
   align-items: center;
   margin: 10px 0;
+  flex-wrap: wrap;
+
   & input {
     width: unset;
     margin: 0 10px;
@@ -80,18 +90,30 @@ const RadioBox = styled.div`
 const ExpContainer = styled.div`
   display: flex;
   flex-direction: row;
-  gap: 12px;
+  gap: 10px;
   margin: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 100%;
+
+  @media (max-width: 480px) {
+    flex-direction: row;
+    align-items: center;
+    gap: 15px;
+  }
 `;
 
 const ExpBox = styled.div`
   display: flex;
   flex-direction: column;
   border: 2px solid #ffffff;
+  border-radius: 20px;
   padding: 15px 20px;
   border-radius: 4px;
   width: 150px;
   font-size: 18px;
+  text-align: center;
+
   & span {
     font-weight: bold;
     font-size: 25px;
@@ -99,17 +121,18 @@ const ExpBox = styled.div`
   }
 `;
 
-const IncomeBox = styled.div`
+const IncomeBox = styled(ExpBox)`
   display: flex;
   flex-direction: column;
   border: 2px solid #ffffff;
+  border-radius: 20px;
   padding: 15px 20px;
   border-radius: 4px;
   width: 150px;
   font-size: 18px;
+  text-align: center;
+
   & span {
-    font-weight: bold;
-    font-size: 25px;
     color: green;
   }
 `;
@@ -122,6 +145,11 @@ const AddTransView = ({ addTransaction, toggleAddTrans }) => {
   const handleAddTransaction = () => {
     if (!amount || !desc) {
       alert("Please enter all details");
+      return;
+    }
+
+    if (Number(amount) <= 0) {
+      alert("Amount should be greater than zero");
       return;
     }
 
@@ -178,21 +206,21 @@ const AddTransView = ({ addTransaction, toggleAddTrans }) => {
 };
 
 const SummaryComp = ({ addTransaction, expense, income }) => {
-  const [isAddtransVisible, toggleAddTrans] = useState(false);
+  const [isAddTransVisible, setAddTransVisible] = useState(false);
 
   return (
     <Container>
       <BalanceA>
         <span>Available Balance: ₹{income - expense}</span>
-        <AddTrans onClick={() => toggleAddTrans(!isAddtransVisible)}>
-          {isAddtransVisible ? "Cancel" : "Add"}
+        <AddTrans onClick={() => setAddTransVisible((prev) => !prev)}>
+          {isAddTransVisible ? "Cancel" : "Add"}
         </AddTrans>
       </BalanceA>
 
-      {isAddtransVisible && (
+      {isAddTransVisible && (
         <AddTransView
           addTransaction={addTransaction}
-          toggleAddTrans={toggleAddTrans}
+          toggleAddTrans={setAddTransVisible}
         />
       )}
       <ExpContainer>

@@ -4,7 +4,7 @@ import styled from "styled-components";
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center; /* Changed from flex-start for better alignment */
   margin: 50px;
   font-family: "Sora", sans-serif;
   font-size: 18px;
@@ -12,6 +12,13 @@ const Container = styled.div`
   max-width: 400px;
   gap: 10px;
   font-weight: 600;
+  color: #e0e1dd;
+  
+
+  @media (max-width: 768px) {
+    margin: 30px 10px;
+    font-size: 16px;
+  }
 
   & input {
     padding: 11px;
@@ -19,14 +26,15 @@ const Container = styled.div`
     border-radius: 15px;
     font-size: 18px;
     margin-top: 10px;
+    width: 100%;
     transition: border 0.2s ease-in-out;
     background-color: #e6e8e9;
     outline: none;
+    color: #0f0d23;
 
-    &::placeholder {
-      color: rgba(0, 0, 0, 0.5);
-      font-style: italic;
-      opacity: 0.7;
+    @media (max-width: 480px) {
+      font-size: 16px;
+      padding: 9px;
     }
   }
 `;
@@ -45,6 +53,14 @@ const Cell = styled.div`
   font-weight: normal;
   justify-content: space-between;
   border-left: 4px solid ${(props) => (props.isExpense ? "red" : "green")};
+  color: #e0e1dd;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    font-size: 16px;
+    padding: 5px;
+    text-align: center;
+  }
 `;
 
 const TransactionCell = ({ payload }) => {

@@ -9,6 +9,16 @@ const Container = styled.div`
   align-items: center;
   width: 100%;
   font-family: "Sora", sans-serif;
+  color: #e0e1dd;
+  padding: 20px;
+
+  @media (max-width: 768px) {
+    padding: 15px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 10px;
+  }
 `;
 
 const HomeComponent = () => {
@@ -16,24 +26,37 @@ const HomeComponent = () => {
   const [expense, setExpense] = useState(0);
   const [income, setIncome] = useState(0);
 
+  // Load transactions from local storage on mount
+  useEffect(() => {
+    const savedTransactions = JSON.parse(localStorage.getItem("transactions"));
+    if (savedTransactions) {
+      updateTransactions(savedTransactions);
+      calcBalance(savedTransactions); // Calculate balance for loaded transactions
+    }
+  }, []);
+
+  // Save transactions to local storage and update balance when transactions change
+  useEffect(() => {
+    localStorage.setItem("transactions", JSON.stringify(transactions));
+    calcBalance(transactions);
+  }, [transactions]);
+
   const addTransaction = (payload) => {
-    const transactionA = [...transactions, payload];
-    updateTransactions(transactionA);
+    const updatedTransactions = [...transactions, payload];
+    updateTransactions(updatedTransactions);
   };
 
-  const calcBalance = () => {
+  const calcBalance = (transactionList) => {
     let exp = 0;
     let inc = 0;
-    transactions.map((payload) => {
+    transactionList.forEach((payload) => {
       payload.type === "EXPENSE"
-        ? (exp = exp + payload.amount)
-        : (inc = inc + payload.amount);
+        ? (exp += payload.amount)
+        : (inc += payload.amount);
     });
     setExpense(exp);
     setIncome(inc);
   };
-
-  useEffect(() => calcBalance(), [transactions]);
 
   return (
     <Container>
@@ -46,4 +69,5 @@ const HomeComponent = () => {
     </Container>
   );
 };
+
 export default HomeComponent;
